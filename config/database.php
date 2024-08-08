@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    'default' => env('DB_CONNECTION', 'sqlanywhere'),
 
     /*
     |--------------------------------------------------------------------------
@@ -34,9 +34,9 @@ return [
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DB_URL'),
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
+            'database' => env('DB_DATABASE', '/database/database.sqlite'),
             'prefix' => '',
-            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
+            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', false),
             'busy_timeout' => null,
             'journal_mode' => null,
             'synchronous' => null,
@@ -110,6 +110,51 @@ return [
             'prefix_indexes' => true,
             // 'encrypt' => env('DB_ENCRYPT', 'yes'),
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
+        ],
+
+
+        // CUSTOM LINE
+        // UNTUK MERUBAH KODE LIMIT DAN OFFSET AGAR SESUAI DENGAN SQLANYWHERE
+        // TARUH KODE INI DI 
+        // \vendor\laravel\framework\src\Illuminate\Database\Connection.php@runQueryCallback
+        // [BEGIN]
+        
+        // $connection = $this->getName();
+        // if ($connection == 'sqlanywhere') {
+        //     if(preg_match(
+        //         '/^(select)(.*)(LIMIT)\s([0-9]+)\s?\n?(OFFSET)?\s?\n?([0-9]+)?(.*)$/ims', 
+        //         $query, 
+        //         $result
+        //     )){
+
+        //         $query = $result[1] . ' TOP ' . $result[4] . ' ';
+        //         if (strtolower($result[5]) == 'offset') {
+        //             $startatnumber = (
+        //                 @$result[6] == null or @$result[6] == ''
+        //                 ? 1
+        //                 : ((int) $result[6])+1
+        //             );
+        //             $query .= 'START AT ' . $startatnumber. ' ';
+        //         }
+        //         $query .= $result[2] . ' ' . $result[7] . ' ';
+
+        //     }
+            
+        // }
+
+        // [END]
+
+        'sqlanywhere' => [
+            'driver' => 'odbc',
+            'dsn' => env('DB_SA_DSN'),
+            'database' => env('DB_SA_DATABASE'),
+            'host' => env('DB_SA_HOST'),
+            'username' => env('DB_SA_USERNAME'),
+            'password' => env('DB_SA_PASSWORD'),
+            'options' => [
+        // Required for Snowflake usage
+                \PDO::ODBC_ATTR_USE_CURSOR_LIBRARY => \PDO::ODBC_SQL_USE_DRIVER
+            ]
         ],
 
     ],
