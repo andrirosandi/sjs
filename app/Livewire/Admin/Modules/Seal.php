@@ -8,6 +8,7 @@ use App\Models\SealTypeUser;
 use Livewire\Attributes\On; 
 use Livewire\Attributes\Url;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 
 class Seal extends Component
 {   
@@ -109,7 +110,8 @@ class Seal extends Component
     public function save($status) {
         // $originalFileName = $this->newattachment->getClientOriginalName();
         $originalFileName = $this->code . '.1.' . $this->newattachment->getClientOriginalName();
-        $this->newattachment->storeAs(path: 'pictures/seal', name: $originalFileName);
+        $this->newattachment->storeAs(path: 'public/pictures/seal', name: $originalFileName);
+        // dump(Storage::url('pictures/' . $originalFileName));
 
         $sealbarcode = SealBarcode::find($this->code);
         $user = session('user');
