@@ -110,7 +110,7 @@ class Seal extends Component
     public function save($status) {
         // $originalFileName = $this->newattachment->getClientOriginalName();
         $originalFileName = $this->code . '.1.' . $this->newattachment->getClientOriginalName();
-        $this->newattachment->storeAs(path: 'public/pictures/seal', name: $originalFileName);
+        $this->newattachment->storeAs(path: 'public/pictures', name: $originalFileName);
         // dump(Storage::url('pictures/' . $originalFileName));
 
         $sealbarcode = SealBarcode::find($this->code);
