@@ -8,7 +8,7 @@
         @endpersist
         {{-- <script src="https://unpkg.com/html5-qrcode"></script> --}}
         <script src="https://kit.fontawesome.com/f985998339.js" crossorigin="anonymous"></script>
-        <title>{{ $title ?? 'Page Title' }}</title>
+        <title>{{ @$data['title'] != null ? 'Sukses Group - ' . @$data['title'] : 'Sukses Group' }}</title>
         @livewireStyles
 
     </head>
@@ -23,7 +23,7 @@
                <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
             </svg>
          </button>
-        <a href="https://flowbite.com" class="flex ms-2 md:me-24">
+        <a href="/" class="flex ms-2 md:me-24">
           {{-- <img src="https://flowbite.com/docs/images/logo.svg" class="h-8 me-3" alt="FlowBite Logo" /> --}}
           <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Sukses Group</span>
         </a>
@@ -39,7 +39,9 @@
    <div class="p-4 border-gray-200  rounded-lg dark:border-gray-700 mt-14">
     @livewire('admin.widgets.content-title')
     <hr class="mt-2">
+    
     @livewire('admin.widgets.action-button')
+    
       {{ $slot }}
    </div>
 </div>

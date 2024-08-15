@@ -3,7 +3,7 @@
 @endphp
 <li>
     <button type="button" class="flex items-center w-full p-2 text-base
-    @if (@$active === true)
+    @if (@$active == 1)
     bg-slate-100 dark:bg-slate-700
     @endif
      text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-{{ @$dropdownid }}" data-collapse-toggle="dropdown-{{ @$dropdownid }}">
@@ -16,14 +16,17 @@
              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
           </svg>
     </button>
-    <ul id="dropdown-{{ @$dropdownid }}" class="hidden py-2 space-y-2">
+    <ul id="dropdown-{{ @$dropdownid }}" class="
+    @if ($active == 0)
+    hidden
+    @endif  py-2 space-y-2">
         @foreach ($child as $m)
         @if ($m['type']==0)
            @include('livewire.admin.widgets.main-menu-component.submenu',[
                 'icon' => '',
                 'caption' => $m['name'],
                 'badge' => null,
-                'active' => false,
+                'active' => @$m['active'],
                 'child' => $m['child']  
            ])
         @else
@@ -32,7 +35,7 @@
             'caption'=> $m['name'],
             'link'=> $m['link'],
             'badge' => null,
-            'active' => false,
+            'active' => @$m['active'],
           ])
         @endif
         @endforeach

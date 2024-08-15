@@ -10,7 +10,7 @@
                'icon' => '',
                'caption' => $m['name'],
                'badge' => null,
-               'active' => false,
+               'active' => @$m['active'],
                'child' => $m['child']
                ])
             @else
@@ -19,12 +19,14 @@
                   'caption'=> $m['name'],
                   'link'=> $m['link'],
                   'badge' => null,
-                  'active' => false,
+                  'active' => @$m['active'],
                ])
             @endif
          @endforeach
          @endif
+        
           
        </ul>
     </div>
+    
  </aside>

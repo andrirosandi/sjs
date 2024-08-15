@@ -6,9 +6,19 @@
     </div>
     @endforeach
     @endif
-    @error($field)
-    <div class="text-red-500 mt-2 text-sm">
-        {{ $message }}
-    </div>
-    @enderror
+
+    @php
+        try {
+            @endphp
+            @error($field)
+            <div class="text-red-500 mt-2 text-sm">
+            {{ $message }}
+            </div>
+            @enderror
+            @php
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    @endphp
+    
 </div>

@@ -11,6 +11,7 @@ class Menu extends Model
     protected $connection = 'sqlanywhere';
     protected $primaryKey = 'id';
     protected $table = 'menu';
+    public $incrementing = false;
     protected $fillable = [
         'id',
         'name',
