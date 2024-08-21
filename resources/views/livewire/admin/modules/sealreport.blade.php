@@ -116,7 +116,7 @@
             class="px-4 py-2 text-gray-700 text-sm rounded-md hover:bg-grey-600">
                 Sembunyikan
             </button>
-            <button type="reset" class="px-4 py-2 bg-gray-500 text-white text-xs rounded-md hover:bg-gray-600">
+            <button type="button" wire:click='resetInput' class="px-4 py-2 bg-gray-500 text-white text-xs rounded-md hover:bg-gray-600">
                 Reset
             </button>
             <button type="submit" class="px-4 py-2 bg-blue-500 text-white text-xs rounded-md hover:bg-blue-600">

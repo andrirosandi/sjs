@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Modules;
 
+use Carbon\Carbon;
 use Livewire\Component;
 use App\Models\SealType;
 use App\Models\SealBarcode;
@@ -55,6 +56,25 @@ class Sealreport extends Component
     public $sealhistory;
     public $meta;
     // public ;
+
+    public function resetInput()  {
+        $this->page = 1;
+        $this->perPage = 20;
+        $this->code = null;
+        $this->sealid = null;
+        $this->sealed_at_from = null;
+        $this->sealed_at_to = null;
+        $this->unsealed_at_from = null;
+        $this->unsealed_at_to = null;
+        $this->sealed_by = null;
+        $this->unsealed_by = null;
+        $this->blocked = null;
+        $this->status = null;
+        $this->showUnusedBarcode = 0;
+        $this->orderby='sealed_at';
+        $this->ordermethod='desc';
+        $this->load();
+}
 
     protected function validateInputs()
     {
@@ -129,15 +149,18 @@ class Sealreport extends Component
         
         // Filter berdasarkan sealed_at range
         if ($this->sealed_at_from != null) {
-            $sealed_at_to = $this->sealed_at_to ?? now(); // Gunakan tanggal hari ini jika sealed_at_to tidak ada
-            $object = $object->whereBetween('sealed_at', [$this->sealed_at_from, $sealed_at_to]);
+            $sealed_at_from = Carbon::parse($this->sealed_at_from)->startOfDay();
+            $sealed_at_to = $this->sealed_at_to ? Carbon::parse($this->sealed_at_to)->endOfDay() : now()->endOfDay();
+            $object = $object->whereBetween('sealed_at', [$sealed_at_from, $sealed_at_to]);
         }
-        
+
         // Filter berdasarkan unsealed_at range
         if ($this->unsealed_at_from != null) {
-            $unsealed_at_to = $this->unsealed_at_to ?? now(); // Gunakan tanggal hari ini jika unsealed_at_to tidak ada
-            $object = $object->whereBetween('unsealed_at', [$this->unsealed_at_from, $unsealed_at_to]);
+            $unsealed_at_from = Carbon::parse($this->unsealed_at_from)->startOfDay();
+            $unsealed_at_to = $this->unsealed_at_to ? Carbon::parse($this->unsealed_at_to)->endOfDay() : now()->endOfDay();
+            $object = $object->whereBetween('unsealed_at', [$unsealed_at_from, $unsealed_at_to]);
         }
+
         
         // Tambahkan kondisi order by jika diperlukan
         if ($this->orderby != null) {
@@ -146,7 +169,7 @@ class Sealreport extends Component
         }
         
         // $this->data = $object->paginate($this->perPage, ['*'], 'page', $this->page);
-        
+        // dump($object->toSql());
         $sqlanywhere = new SqlAnywhere($object);
         $object = $sqlanywhere->select(
             ['sealbarcodes.barcode',
