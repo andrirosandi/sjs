@@ -210,7 +210,7 @@
             </div>
         </div>
     @endforeach
-    @if (!empty($meta))
+    @if (@$meta['lastpagenumber'] > 1)
     <div class="flex space-x-2 items-center text-xs">
         <!-- Tombol First -->
         <button 
