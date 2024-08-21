@@ -53,6 +53,7 @@ class Sealreport extends Component
     public $errors,$errorsInput;
     public $sealtypes;
     public $sealhistory;
+    public $meta;
     // public ;
 
     protected function validateInputs()
@@ -166,10 +167,15 @@ class Sealreport extends Component
 
         )->page($this->page,$this->perPage)->prepare($meta);
         $this->sealhistory = $object->get();
+        $this->meta = $meta;
     }
 
     function setShowFilterForm($i) {
         $this->showFilterForm = $i;
+        $this->load();
+    }
+    public function setPage($page) {
+        $this->page = $page;
         $this->load();
     }
     

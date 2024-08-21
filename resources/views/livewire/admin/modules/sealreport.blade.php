@@ -1,4 +1,14 @@
 <div>
+    
+    <div class="flex justify-start">
+        <a href="{{ env('APP_URL') }}/storage/reports/seal-history.rpt" 
+            class="px-4 py-2 bg-green-500 text-white text-xs rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50">
+            Unduh Seal-History.Rpt
+        </a>
+    </div>
+       
+    
+    {{-- @dump($meta) --}}
 
     {{-- @dump($errorsInput) --}}
     <button id="filterbutton" wire:click='setShowFilterForm(1)' 
@@ -200,5 +210,58 @@
             </div>
         </div>
     @endforeach
+    @if (!empty($meta))
+    <div class="flex space-x-2 items-center text-xs">
+        <!-- Tombol First -->
+        <button 
+            wire:click="setPage(1)"
+            class="focus:outline-none {{ $meta['page'] == 1 ? 'text-gray-400 cursor-not-allowed' : 'text-blue-500 hover:text-blue-700' }}"
+            @if ($meta['page'] == 1) disabled @endif>
+            <span class="material-icons align-middle">
+                first_page
+            </span>
+        </button>
+    
+        <!-- Tombol Previous -->
+        <button 
+            wire:click="setPage({{ $meta['page'] - 1 }})"
+            class="focus:outline-none {{ $meta['page'] == 1 ? 'text-gray-400 cursor-not-allowed' : 'text-blue-500 hover:text-blue-700' }}"
+            @if ($meta['page'] == 1) disabled @endif>
+            <span class="material-icons align-middle">
+                chevron_left
+            </span>
+        </button>
+    
+        <!-- Halaman Saat Ini -->
+        <span class="text-gray-600 align-middle">
+            {{ $meta['page'] }} / {{ $meta['lastpagenumber'] }}
+        </span>
+    
+        <!-- Tombol Next -->
+        <button 
+            wire:click="setPage({{ $meta['page'] + 1 }})"
+            class="focus:outline-none {{ $meta['page'] == $meta['lastpagenumber'] ? 'text-gray-400 cursor-not-allowed' : 'text-blue-500 hover:text-blue-700' }}"
+            @if ($meta['page'] == $meta['lastpagenumber']) disabled @endif>
+            <span class="material-icons align-middle">
+                chevron_right
+            </span>
+        </button>
+    
+        <!-- Tombol Last -->
+        <button 
+            wire:click="setPage({{ $meta['lastpagenumber'] }})"
+            class="focus:outline-none {{ $meta['page'] == $meta['lastpagenumber'] ? 'text-gray-400 cursor-not-allowed' : 'text-blue-500 hover:text-blue-700' }}"
+            @if ($meta['page'] == $meta['lastpagenumber']) disabled @endif>
+            <span class="material-icons align-middle">
+                last_page
+            </span>
+        </button>
+    </div>
+    
+    <!-- Tambahkan link untuk Material Icons di head HTML -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    @endif
+    
 </div>
+
     </div>
