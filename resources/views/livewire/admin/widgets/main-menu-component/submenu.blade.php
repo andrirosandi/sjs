@@ -20,6 +20,7 @@
     @if ($active == 0)
     hidden
     @endif  py-2 space-y-2">
+        @if(!empty($child))
         @foreach ($child as $m)
         @if ($m['type']==0)
            @include('livewire.admin.widgets.main-menu-component.submenu',[
@@ -39,6 +40,9 @@
           ])
         @endif
         @endforeach
+        @endif
+        
+    
           
           
           
