@@ -21,3 +21,18 @@ Route::get('/landingpage',function () {
     return view('landingpage');
 });
 // Route::get('/', Dashboard::class)->middleware(authMiddleware::class);
+
+Route::get('/time', function () {
+    // Mendapatkan timezone saat ini
+    // $timezone = config('app.timezone');
+    
+    // // Mendapatkan tanggal dan waktu saat ini
+    // $dateTime = now()->format('Y-m-d H:i:s');
+
+    return response()->json([
+        'server_timezone' => date_default_timezone_get(),
+        'app_timezone' => config('app.timezone'),
+        'current_time' => now()->format('Y-m-d H:i:s'),
+        
+    ]);
+});
