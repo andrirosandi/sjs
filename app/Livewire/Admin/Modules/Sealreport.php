@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Modules;
 
 use Carbon\Carbon;
+use App\Models\User;
 use Livewire\Component;
 use App\Models\SealType;
 use App\Models\SealBarcode;
@@ -53,6 +54,7 @@ class Sealreport extends Component
     public $message;
     public $errors,$errorsInput;
     public $sealtypes;
+    public $sealusers;
     public $sealhistory;
     public $meta;
     // public ;
@@ -137,25 +139,27 @@ class Sealreport extends Component
     function load(){
         $this->validateInputs();
         $this->sealtypes = SealType::get();
+        $this->sealusers = User::leftJoin('sealtypeusers','users.userid','sealtypeusers.userid')->select('users.userid')->distinct()->get();
 
+        // dump($this->sealusers);s
         $object = SealBarcode::join('SealTypes','sealbarcodes.sealid','sealtypes.sealid');
-        if ($this->code != null) $object = $object->where('sealbarcodes.barcode','like','%'.$this->code.'%');
-        if ($this->sealed_by != null) $object = $object->where('sealbarcodes.sealed_by','like','%'.$this->sealed_by.'%');
-        if ($this->unsealed_by != null) $object = $object->where('sealbarcodes.unsealed_by','like','%'.$this->unsealed_by.'%');
-        if ($this->sealid != null) $object = $object->where('sealtypes.sealid','like','%'.$this->sealid.'%');
-        if ($this->status != null) $object = $object->where('sealbarcodes.status','=',$this->status);
-        if ($this->blocked != null) $object = $object->where('sealbarcodes.blocked','=',$this->blocked);
+        if (!empty(trim($this->code))) $object = $object->where('sealbarcodes.barcode','like','%'.$this->code.'%');
+        if (!empty(trim($this->sealed_by))) $object = $object->where('sealbarcodes.sealed_by','like','%'.$this->sealed_by.'%');
+        if (!empty(trim($this->unsealed_by))) $object = $object->where('sealbarcodes.unsealed_by','like','%'.$this->unsealed_by.'%');
+        if (!empty(trim($this->sealid))) $object = $object->where('sealtypes.sealid','like','%'.$this->sealid.'%');
+        if (!empty(trim($this->status))) $object = $object->where('sealbarcodes.status','=',$this->status);
+        if (!empty(trim($this->blocked))) $object = $object->where('sealbarcodes.blocked','=',$this->blocked);
         if ($this->showUnusedBarcode == 0) $object = $object->where('sealbarcodes.status','>',0);
         
         // Filter berdasarkan sealed_at range
-        if ($this->sealed_at_from != null) {
+        if (!empty(trim($this->sealed_at_from))) {
             $sealed_at_from = Carbon::parse($this->sealed_at_from)->startOfDay();
             $sealed_at_to = $this->sealed_at_to ? Carbon::parse($this->sealed_at_to)->endOfDay() : now()->endOfDay();
             $object = $object->whereBetween('sealed_at', [$sealed_at_from, $sealed_at_to]);
         }
 
         // Filter berdasarkan unsealed_at range
-        if ($this->unsealed_at_from != null) {
+        if (!empty(trim($this->unsealed_at_from))) {
             $unsealed_at_from = Carbon::parse($this->unsealed_at_from)->startOfDay();
             $unsealed_at_to = $this->unsealed_at_to ? Carbon::parse($this->unsealed_at_to)->endOfDay() : now()->endOfDay();
             $object = $object->whereBetween('unsealed_at', [$unsealed_at_from, $unsealed_at_to]);
@@ -163,13 +167,12 @@ class Sealreport extends Component
 
         
         // Tambahkan kondisi order by jika diperlukan
-        if ($this->orderby != null) {
+        if (!empty(trim($this->orderby))) {
             $ordermethod = $this->ordermethod ?? 'asc'; // Gunakan 'asc' jika ordermethod kosong
             $object = $object->orderBy($this->orderby, $ordermethod);
         }
         
         // $this->data = $object->paginate($this->perPage, ['*'], 'page', $this->page);
-        // dump($object->toSql());
         $sqlanywhere = new SqlAnywhere($object);
         $object = $sqlanywhere->select(
             ['sealbarcodes.barcode',
@@ -188,9 +191,10 @@ class Sealreport extends Component
             'sealtypes.sealname',]
             
 
-        )->page($this->page,$this->perPage)->prepare($meta);
+            )->page($this->page,$this->perPage)->prepare($meta);
         $this->sealhistory = $object->get();
         $this->meta = $meta;
+        // dump($this->sealhistory);
     }
 
     function setShowFilterForm($i) {

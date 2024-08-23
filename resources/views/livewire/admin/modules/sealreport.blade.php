@@ -38,11 +38,24 @@
         </div>
       
         <!-- Sealed By -->
+        {{-- <div> --}}
+          {{-- <label for="sealed_by" class="block text-xs font-medium text-gray-700">Sealed By</label> --}}
+          {{-- <input wire:model='sealed_by' type="text" id="sealed_by" name="sealed_by" class="mt-1 block w-full md:w-1/4 rounded-md border-gray-300 shadow-sm text-xs" /> --}}
+          {{-- @include('livewire.includes.error-field', ['field' => 'sealed_by']) --}}
+        {{-- </div> --}}
+
         <div>
-          <label for="sealed_by" class="block text-xs font-medium text-gray-700">Sealed By</label>
-          <input wire:model='sealed_by' type="text" id="sealed_by" name="sealed_by" class="mt-1 block w-full md:w-1/4 rounded-md border-gray-300 shadow-sm text-xs" />
-          @include('livewire.includes.error-field', ['field' => 'sealed_by'])
-        </div>
+            <label for="sealed_by" class="block text-xs font-medium text-gray-700">Seal By</label>
+            <select wire:model='sealed_by' id="sealed_by" name="sealed_by" class="mt-1 block w-full md:w-1/4 rounded-md border-gray-300 shadow-sm text-xs">
+              <option></option>
+              @if(!empty($sealusers))
+              @foreach (@$sealusers as $sealuser )
+                  <option value="{{$sealuser->userid}}">{{ Str::title( $sealuser->userid)}}</option>
+              @endforeach
+              @endif
+            </select>
+            @include('livewire.includes.error-field', ['field' => 'sealed_by'])
+          </div>
       
         <!-- Sealed At -->
         <div>
@@ -56,11 +69,23 @@
         </div>
       
         <!-- Unsealed By -->
+        {{-- <div> --}}
+          {{-- <label for="unsealed_by" class="block text-xs font-medium text-gray-700">Unsealed By</label> --}}
+          {{-- <input wire:model='unsealed_by' type="text" id="unsealed_by" name="unsealed_by" class="mt-1 block w-full md:w-1/4 rounded-md border-gray-300 shadow-sm text-xs" /> --}}
+          {{-- @include('livewire.includes.error-field', ['field' => 'unsealed_by']) --}}
+        {{-- </div> --}}
         <div>
-          <label for="unsealed_by" class="block text-xs font-medium text-gray-700">Unsealed By</label>
-          <input wire:model='unsealed_by' type="text" id="unsealed_by" name="unsealed_by" class="mt-1 block w-full md:w-1/4 rounded-md border-gray-300 shadow-sm text-xs" />
-          @include('livewire.includes.error-field', ['field' => 'unsealed_by'])
-        </div>
+            <label for="unsealed_by" class="block text-xs font-medium text-gray-700">Unseal By</label>
+            <select wire:model='unsealed_by' id="unsealed_by" name="unsealed_by" class="mt-1 block w-full md:w-1/4 rounded-md border-gray-300 shadow-sm text-xs">
+              <option></option>
+              @if(!empty($sealusers))
+              @foreach (@$sealusers as $sealuser )
+                  <option value="{{$sealuser->userid}}">{{ Str::title( $sealuser->userid)}}</option>
+              @endforeach
+              @endif
+            </select>
+            @include('livewire.includes.error-field', ['field' => 'unsealed_by'])
+          </div>
       
         <!-- Unsealed At -->
         <div>
@@ -136,12 +161,12 @@
     $domain = env('APP_URL', 'http://localhost');
 @endphp
 
-<div class="space-y-4 p-4 md:p-8">
+<div class="space-y-4 p-4 md:p-8" wire:replace>
     @foreach ($sealhistory as $item)
-        <div class="border-t pt-4">
+        <div key='{{Str::random(80)}}' class="border-t pt-4">
             <!-- Mobile header -->
             <div class="md:hidden">
-                <p id="{{Str::random(40)}}" class="text-lg">{{ $item->sealname }}</p>
+                <p key="{{Str::random(40)}}" class="text-lg">{{ $item->sealname }}</p>
                 <p class="text-gray-500 text-xs pb-2">{{ $item->barcode }}</p>
             </div>
             
