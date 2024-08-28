@@ -120,13 +120,12 @@ return [
         // [BEGIN]
         
         // $connection = $this->getName();
-        // if ($connection == 'sqlanywhere') {
-        //     if(preg_match(
+        // if (strpos($connection, 'sqlanywhere') !== false) { // atau str_contains($connection, 'sqlanywhere') untuk PHP 8+
+        //     if (preg_match(
         //         '/^(select)(.*)(LIMIT)\s([0-9]+)\s?\n?(OFFSET)?\s?\n?([0-9]+)?(.*)$/ims', 
         //         $query, 
         //         $result
-        //     )){
-
+        //     )) {
         //         $query = $result[1] . ' TOP ' . $result[4] . ' ';
         //         if (strtolower($result[5]) == 'offset') {
         //             $startatnumber = (
@@ -137,10 +136,9 @@ return [
         //             $query .= 'START AT ' . $startatnumber. ' ';
         //         }
         //         $query .= $result[2] . ' ' . $result[7] . ' ';
-
         //     }
-            
         // }
+
 
         // [END]
 
