@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Modules;
 
+
 use Carbon\Carbon;
 use App\Models\User;
 use Livewire\Component;
@@ -9,6 +10,8 @@ use App\Models\SealType;
 use App\Models\SealBarcode;
 use Livewire\Attributes\Url;
 use App\Libraries\SqlAnywhere;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -36,7 +39,8 @@ class Sealreport extends Component
     
     $orderby='sealed_at',$ordermethod='desc',
     
-    $showFilterForm = 0
+    $showFilterForm = 0,
+    $export = null
     ;
     public $data = [
         'title' => 'Seal Activity',
@@ -57,6 +61,7 @@ class Sealreport extends Component
     public $sealusers;
     public $sealhistory;
     public $meta;
+    public $exportData;
     // public ;
 
     public function resetInput()  {
@@ -136,7 +141,7 @@ class Sealreport extends Component
         $this->load();
         // dump($object->get());
     }
-    function load(){
+    function load($remark = null){
         $this->validateInputs();
         $this->sealtypes = SealType::get();
         $this->sealusers = User::leftJoin('sealtypeusers','users.userid','sealtypeusers.userid')->select('users.userid')->distinct()->get();
@@ -173,9 +178,8 @@ class Sealreport extends Component
         }
         
         // $this->data = $object->paginate($this->perPage, ['*'], 'page', $this->page);
-        $sqlanywhere = new SqlAnywhere($object);
-        $object = $sqlanywhere->select(
-            ['sealbarcodes.barcode',
+        if ($remark == 'pdf') {
+            $this->exportData = $object->select(['sealbarcodes.barcode',
             'sealbarcodes.blocked',
             'sealbarcodes.created_at',
             'sealbarcodes.sealed_by',
@@ -188,12 +192,33 @@ class Sealreport extends Component
             'sealbarcodes.unsealed_location',
             'sealbarcodes.status',
             'sealtypes.sealid',
-            'sealtypes.sealname',]
-            
+            'sealtypes.sealname',])->get();
+        }
+        else{
+            $sqlanywhere = new SqlAnywhere($object);
+            $object = $sqlanywhere->select(
+                ['sealbarcodes.barcode',
+                'sealbarcodes.blocked',
+                'sealbarcodes.created_at',
+                'sealbarcodes.sealed_by',
+                'sealbarcodes.sealed_at',
+                'sealbarcodes.sealed_picture',
+                'sealbarcodes.sealed_location',
+                'sealbarcodes.unsealed_by',
+                'sealbarcodes.unsealed_at',
+                'sealbarcodes.unsealed_picture',
+                'sealbarcodes.unsealed_location',
+                'sealbarcodes.status',
+                'sealtypes.sealid',
+                'sealtypes.sealname',]
+                
 
-            )->page($this->page,$this->perPage)->prepare($meta);
-        $this->sealhistory = $object->get();
-        $this->meta = $meta;
+                )->page($this->page,$this->perPage)->prepare($meta);
+            $this->sealhistory = $object->get();
+            $this->meta = $meta;
+
+        }
+        
         // dump($this->sealhistory);
     }
 
@@ -204,6 +229,39 @@ class Sealreport extends Component
     public function setPage($page) {
         $this->page = $page;
         $this->load();
+    }
+    
+    public function generatePDF() {
+        // dump('hai');
+        $this->load('pdf');
+        $seal = SealType::find($this->sealid);
+       
+
+        $data = [
+            'title' => 'Seal History',
+            'code' => $this->code,
+            'sealid' => $this->sealid,
+            'sealname' => $seal->sealname,
+            'sealed_at_from' => $this->sealed_at_from,
+            'sealed_at_to' => $this->sealed_at_to,
+            'unsealed_at_from' => $this->unsealed_at_from,
+            'unsealed_at_to' => $this->unsealed_at_to,
+            'sealed_by' => $this->sealed_by,
+            'unsealed_by' => $this->unsealed_by,
+            'blocked' => $this->blocked,
+            'status' => $this->status,
+            'showUnusedBarcode' => $this->showUnusedBarcode,
+            'content' => $this->exportData
+        ];
+
+        dump($data);
+
+        $pdf = Pdf::loadView('livewire.admin.modules.export.sealreport',['data' => $data]);
+
+        // Kembalikan respons stream langsung tanpa memanggil with()
+        return response()->streamDownload(function() use ($pdf) {
+            echo $pdf->stream();
+        }, 'seal-history.pdf');
     }
     
 

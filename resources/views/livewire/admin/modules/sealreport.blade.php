@@ -1,11 +1,25 @@
 <div>
     
-    <div class="flex justify-start">
+    <div class="flex justify-start space-x-2 items-center" wire:replace>
+        <!-- Tombol Unduh Seal-History.Rpt -->
         <a href="{{ env('APP_URL') }}/storage/reports/seal-history.rpt" 
-            class="px-4 py-2 bg-green-500 text-white text-xs rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50">
+            class="flex items-center px-4 py-2 bg-green-500 text-white text-xs rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50">
             Unduh Seal-History.Rpt
         </a>
+    
+        <!-- Tombol Export PDF -->
+        <a href='javascript:void(0)' 
+        {{-- onclick="window.open(window.location.href + (window.location.href.includes('?') ? '&export=pdf' : '?export=pdf'), '_blank')" --}}
+        wire:click='generatePDF'
+    class="flex items-center px-4 py-2 bg-red-500 text-white text-xs rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50">
+    Export PDF
+</a>
+
     </div>
+    
+    
+
+    
        
     
     {{-- @dump($meta) --}}
@@ -15,14 +29,14 @@
     onclick="document.getElementById('filterform').classList.remove('hidden');
     document.getElementById('filterbutton').classList.add('hidden');" 
     class="px-4 py-2 text-gray-700 text-sm rounded-md hover:bg-grey-600
-    @if ($showFilterForm == 1)
+    @if (@$showFilterForm == 1)
         hidden
     @endif
     ">
         Tampilkan Filter +
     </button>
     
-    <form id="filterform" wire:submit='load()' class="space-y-4 p-4 @if ($showFilterForm == 0) hidden @endif">
+    <form id="filterform" wire:submit='load()' class="space-y-4 p-4 @if (@$showFilterForm == 0) hidden @endif">
         <!-- Seal Type -->
         <div>
           <label for="seal_type" class="block text-xs font-medium text-gray-700">Seal Type</label>
