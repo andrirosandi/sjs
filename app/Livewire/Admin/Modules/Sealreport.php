@@ -254,7 +254,7 @@ class Sealreport extends Component
             'content' => $this->exportData
         ];
 
-        dump($data);
+        // dump($data);
 
         $pdf = Pdf::loadView('livewire.admin.modules.export.sealreport',['data' => $data]);
 
