@@ -190,7 +190,7 @@
             <tr>
                 <td rowspan="3">{{ $item['barcode'] }}</td>
                 <td rowspan="3"><span class="badge {{$item['status'] == 2 ? 'unsealed' : ($item['status'] == 1 ? 'sealed' : 'unused')}}">{{$item['status'] == 2 ? 'unsealed' : ($item['status'] == 1 ? 'sealed' : 'unused')}}</span></td>
-                <td rowspan="3"><img src="{{ env('APP_URL', 'http://localhost').'/storage/pictures/'.$item['sealed_picture'] }}" alt="{{ env('APP_URL', 'http://localhost').'/storage/pictures/'.$item['sealed_picture'] }}"></td>
+                <td rowspan="3"><img src="{{ env('APP_URL', 'http://localhost').'/storage/pictures/thumbnail/'.$item['sealed_picture'] }}" alt="{{ env('APP_URL', 'http://localhost').'/storage/pictures/'.$item['sealed_picture'] }}"></td>
                 <td>{{ Str::title($item['sealed_by']) }}</td>
                 <td rowspan="3"><img src="{{ $item['unsealed_picture'] }}" alt="Unsealed Picture"></td>
                 <td>{{ Str::title($item['unsealed_by']) }}</td>

@@ -215,7 +215,7 @@
                 <div>
                     @if($item->status >= 1)
                         <a href="{{ $domain }}/storage/pictures/{{ $item->sealed_picture }}" target="_blank">
-                            <img src="{{ $domain }}/storage/pictures/{{ $item->sealed_picture }}" alt="Sealed Picture" class="w-full h-32 md:h-48 bg-gray-200 object-cover cursor-pointer">
+                            <img src="{{ $domain }}/storage/pictures/thumbnail/{{ $item->sealed_picture }}" alt="Sealed Picture" class="w-full h-32 md:h-48 bg-gray-200 object-cover cursor-pointer">
                         </a>
                         <p class="text-gray-700 text-xs md:text-sm mt-2">{{ $item->sealed_by }}</p>
                         <p class="text-gray-500 text-xs md:text-sm">
@@ -233,7 +233,7 @@
                 <div>
                     @if($item->status == 2)
                         <a href="{{ $domain }}/storage/pictures/{{ $item->unsealed_picture }}" target="_blank">
-                            <img src="{{ $domain }}/storage/pictures/{{ $item->unsealed_picture }}" alt="Unsealed Picture" class="w-full h-32 md:h-48 bg-gray-200 object-cover cursor-pointer">
+                            <img src="{{ $domain }}/storage/pictures/thumbnail/{{ $item->unsealed_picture }}" alt="Unsealed Picture" class="w-full h-32 md:h-48 bg-gray-200 object-cover cursor-pointer">
                         </a>
                         <p class="text-gray-700 text-xs md:text-sm mt-2">{{ $item->unsealed_by }}</p>
                         <p class="text-gray-500 text-xs md:text-sm">
