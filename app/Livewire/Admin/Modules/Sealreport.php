@@ -235,13 +235,14 @@ class Sealreport extends Component
         // dump('hai');
         $this->load('pdf');
         $seal = SealType::find($this->sealid);
+        $sealname = ($seal ? $seal->sealname : null);
        
 
         $data = [
             'title' => 'Seal History',
             'code' => $this->code,
             'sealid' => $this->sealid,
-            'sealname' => $seal->sealname,
+            'sealname' => $sealname,
             'sealed_at_from' => $this->sealed_at_from,
             'sealed_at_to' => $this->sealed_at_to,
             'unsealed_at_from' => $this->unsealed_at_from,
