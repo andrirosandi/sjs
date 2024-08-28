@@ -104,14 +104,14 @@
         <tr>
             <td>Print Date</td>
             <td>:</td>
-            <td colspan="2">{{ \Carbon\Carbon::now()->format('d M Y H:i') }}</td>
+            <td colspan="3">{{ \Carbon\Carbon::now()->format('d M Y H:i') }}</td>
         </tr>
 
         @if ($data['code'])
         <tr>
             <td>Code</td>
             <td>:</td>
-            <td colspan="2">{{ $data['code'] }}</td>
+            <td colspan="3">{{ $data['code'] }}</td>
         </tr>
         @endif
 
@@ -119,7 +119,7 @@
         <tr>
             <td>Sealid</td>
             <td>:</td>
-            <td colspan="2">{{ $data['sealname'] }}</td>
+            <td colspan="3">{{ $data['sealname'] }}</td>
         </tr>
         @endif
 
@@ -128,6 +128,7 @@
             <td>Sealed At</td>
             <td>:</td>
             <td>{{ \Carbon\Carbon::parse($data['sealed_at_from'])->format('d M Y H:i') }}</td>
+            <td>:</td>
             <td>{{ \Carbon\Carbon::parse($data['sealed_at_to'])->format('d M Y H:i') }}</td>
         </tr>
         @endif
@@ -137,6 +138,7 @@
             <td>Unsealed At</td>
             <td>:</td>
             <td>{{ \Carbon\Carbon::parse($data['unsealed_at_from'])->format('d M Y H:i') }}</td>
+            <td>:</td>
             <td>{{ \Carbon\Carbon::parse($data['unsealed_at_to'])->format('d M Y H:i') }}</td>
         </tr>
         @endif
@@ -145,7 +147,7 @@
         <tr>
             <td>Sealed By</td>
             <td>:</td>
-            <td colspan="2">{{ Str::title($data['sealed_by']) }}</td>
+            <td colspan="3">{{ Str::title($data['sealed_by']) }}</td>
         </tr>
         @endif
 
@@ -153,7 +155,7 @@
         <tr>
             <td>Unsealed By</td>
             <td>:</td>
-            <td colspan="2">{{ Str::title($data['unsealed_by']) }}</td>
+            <td colspan="3">{{ Str::title($data['unsealed_by']) }}</td>
         </tr>
         @endif
 
@@ -161,7 +163,7 @@
         <tr>
             <td>Blocked</td>
             <td>:</td>
-            <td colspan="2">{{ $data['blocked'] }}</td>
+            <td colspan="3">{{ $data['blocked'] }}</td>
         </tr>
         @endif
 
@@ -169,7 +171,7 @@
         <tr>
             <td>Status</td>
             <td>:</td>
-            <td colspan="2">{{$data['status'] == 2 ? 'unsealed' : ($data['status'] == 1 ? 'sealed' : 'unused')}}</td>
+            <td colspan="3">{{$data['status'] == 2 ? 'unsealed' : ($data['status'] == 1 ? 'sealed' : 'unused')}}</td>
         </tr>
         @endif
 
