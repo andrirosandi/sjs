@@ -128,7 +128,7 @@
             <td>Sealed At</td>
             <td>:</td>
             <td>{{ \Carbon\Carbon::parse($data['sealed_at_from'])->format('d M Y H:i') }}</td>
-            <td>:</td>
+            <td>to</td>
             <td>{{ \Carbon\Carbon::parse($data['sealed_at_to'])->format('d M Y H:i') }}</td>
         </tr>
         @endif
@@ -138,7 +138,7 @@
             <td>Unsealed At</td>
             <td>:</td>
             <td>{{ \Carbon\Carbon::parse($data['unsealed_at_from'])->format('d M Y H:i') }}</td>
-            <td>:</td>
+            <td>to</td>
             <td>{{ \Carbon\Carbon::parse($data['unsealed_at_to'])->format('d M Y H:i') }}</td>
         </tr>
         @endif
