@@ -188,21 +188,22 @@
         <tbody>
             @foreach ($data['content'] as $item)
             <tr>
-                <td rowspan="3">{{ $item['barcode'] }}</td>
-                <td rowspan="3"><span class="badge {{$item['status'] == 2 ? 'unsealed' : ($item['status'] == 1 ? 'sealed' : 'unused')}}">{{$item['status'] == 2 ? 'unsealed' : ($item['status'] == 1 ? 'sealed' : 'unused')}}</span></td>
-                <td rowspan="3"><img src="{{ env('APP_URL', 'http://localhost').'/storage/pictures/thumbnail/'.$item['sealed_picture'] }}" ></td>
-                <td>{{ Str::title($item['sealed_by']) }}</td>
-                <td rowspan="3"><img src="{{ env('APP_URL', 'http://localhost').'/storage/pictures/thumbnail/'.$item['sealed_picture'] }}" ></td>
-                <td>{{ Str::title($item['unsealed_by']) }}</td>
+                <td>{{ $item['barcode'] }}</td>
+                <td><span class="badge {{$item['status'] == 2 ? 'unsealed' : ($item['status'] == 1 ? 'sealed' : 'unused')}}">{{$item['status'] == 2 ? 'unsealed' : ($item['status'] == 1 ? 'sealed' : 'unused')}}</span></td>
+                <td><img src="{{ env('APP_URL', 'http://localhost').'/storage/pictures/thumbnail/'.$item['sealed_picture'] }}" ></td>
+                <td>
+                    {{ Str::title($item['sealed_by']) }} <br>
+                    {{ \Carbon\Carbon::parse($item['sealed_at'])->format('d M Y H:i') }} <br>
+                    <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($item['sealed_location']) }}" target="_blank">{{ $item['sealed_location'] }}</a>
+                </td>
+                <td><img src="{{ env('APP_URL', 'http://localhost').'/storage/pictures/thumbnail/'.$item['sealed_picture'] }}" ></td>
+                <td>
+                    {{ Str::title($item['unsealed_by']) }} <br>
+                    {{ \Carbon\Carbon::parse($item['unsealed_at'])->format('d M Y H:i') }} <br>
+                    <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($item['unsealed_location']) }}" target="_blank">{{ $item['unsealed_location'] }}</a>
+                </td>
             </tr>
-            <tr>
-                <td>{{ \Carbon\Carbon::parse($item['sealed_at'])->format('d M Y H:i') }}</td>
-                <td>{{ \Carbon\Carbon::parse($item['unsealed_at'])->format('d M Y H:i') }}</td>
-            </tr>
-            <tr>
-                <td><a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($item['sealed_location']) }}" target="_blank">{{ $item['sealed_location'] }}</a></td>
-                <td><a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($item['unsealed_location']) }}" target="_blank">{{ $item['unsealed_location'] }}</a></td>
-            </tr>
+            
             @endforeach
         </tbody>
     </table>
