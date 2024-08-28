@@ -9,6 +9,11 @@
             margin: 0;
             padding: 20px;
         }
+        a {
+        margin: 0;
+        padding: 0;
+        display: inline-block; /* Sesuaikan dengan kebutuhan */
+    }
 
         /* Style for header table */
         .header-table {
@@ -190,20 +195,27 @@
             <tr>
                 <td>{{ $item['barcode'] }}</td>
                 <td><span class="badge {{$item['status'] == 2 ? 'unsealed' : ($item['status'] == 1 ? 'sealed' : 'unused')}}">{{$item['status'] == 2 ? 'unsealed' : ($item['status'] == 1 ? 'sealed' : 'unused')}}</span></td>
-                <td><img src="{{ env('APP_URL', 'http://localhost').'/storage/pictures/thumbnail/'.$item['sealed_picture'] }}" ></td>
+                <td>
+                    <a href="{{ env('APP_URL', 'http://localhost').'/storage/pictures/'.$item['sealed_picture'] }}" target="_blank">
+                        <img src="{{ env('APP_URL', 'http://localhost').'/storage/pictures/thumbnail/'.$item['sealed_picture'] }}" >
+                    </a>
+                </td>
                 <td>
                     {{ Str::title($item['sealed_by']) }} <br>
                     {{ \Carbon\Carbon::parse($item['sealed_at'])->format('d M Y H:i') }} <br>
                     <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($item['sealed_location']) }}" target="_blank">{{ $item['sealed_location'] }}</a>
                 </td>
-                <td><img src="{{ env('APP_URL', 'http://localhost').'/storage/pictures/thumbnail/'.$item['sealed_picture'] }}" ></td>
+                <td>
+                    <a href="{{ env('APP_URL', 'http://localhost').'/storage/pictures/'.$item['unsealed_picture'] }}" target="_blank">
+                        <img src="{{ env('APP_URL', 'http://localhost').'/storage/pictures/thumbnail/'.$item['unsealed_picture'] }}" >
+                    </a>
+                </td>
                 <td>
                     {{ Str::title($item['unsealed_by']) }} <br>
                     {{ \Carbon\Carbon::parse($item['unsealed_at'])->format('d M Y H:i') }} <br>
                     <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($item['unsealed_location']) }}" target="_blank">{{ $item['unsealed_location'] }}</a>
                 </td>
             </tr>
-            
             @endforeach
         </tbody>
     </table>
