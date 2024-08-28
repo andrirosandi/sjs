@@ -54,6 +54,14 @@
             background-color: #eef1f5;
         }
 
+        /* Image styles */
+        .main-table img {
+            max-width: 100px; /* Adjust the max width as needed */
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
         /* Badge styles */
         .badge {
             display: inline-block;

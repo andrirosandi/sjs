@@ -232,6 +232,7 @@ class Sealreport extends Component
     }
     
     public function generatePDF() {
+        ini_set('memory_limit', '1024M'); // or a higher value
         // dump('hai');
         $this->load('pdf');
         $seal = SealType::find($this->sealid);
