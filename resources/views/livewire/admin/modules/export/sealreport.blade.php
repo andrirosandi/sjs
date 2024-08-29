@@ -187,6 +187,7 @@
         <thead>
             <tr>
                 <th>Code</th>
+                <th>Seal Type</th>
                 <th>Status</th>
                 <th colspan="2">Sealed</th>
                 <th colspan="2">Unsealed</th>
@@ -196,6 +197,7 @@
             @foreach ($data['content'] as $item)
             <tr>
                 <td>{{ $item['barcode'] }}</td>
+                <td>{{ $item['sealname'] }}</td>
                 <td><span class="badge {{$item['status'] == 2 ? 'unsealed' : ($item['status'] == 1 ? 'sealed' : 'unused')}}">{{$item['status'] == 2 ? 'unsealed' : ($item['status'] == 1 ? 'sealed' : 'unused')}}</span></td>
                 <td>
                     <a href="{{ env('APP_URL', 'http://localhost').'/storage/pictures/'.$item['sealed_picture'] }}" target="_blank">
@@ -204,7 +206,7 @@
                 </td>
                 <td>
                     {{ Str::title($item['sealed_by']) }} <br>
-                    {{ \Carbon\Carbon::parse($item['sealed_at'])->format('d M Y H:i') }} <br>
+                    {{ (!empty($item['sealed_at']))? \Carbon\Carbon::parse($item['unsealed_at'])->format('d M Y H:i') : '' }} <br>
                     <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($item['sealed_location']) }}" target="_blank">{{ $item['sealed_location'] }}</a>
                 </td>
                 <td>
@@ -214,7 +216,7 @@
                 </td>
                 <td>
                     {{ Str::title($item['unsealed_by']) }} <br>
-                    {{ \Carbon\Carbon::parse($item['unsealed_at'])->format('d M Y H:i') }} <br>
+                    {{ (!empty($item['unsealed_at']))? \Carbon\Carbon::parse($item['unsealed_at'])->format('d M Y H:i') : '' }} <br>
                     <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($item['unsealed_location']) }}" target="_blank">{{ $item['unsealed_location'] }}</a>
                 </td>
             </tr>
