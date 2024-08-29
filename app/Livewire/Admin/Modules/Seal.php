@@ -40,6 +40,54 @@ class Seal extends Component
     #[On('coded')]
     public function setCode($code) {
         // ... (rest of the setCode method remains unchanged)
+        
+        $this->code = $code;
+
+        $barcodedata = SealBarcode::join('sealtypes','sealbarcodes.sealid','sealtypes.sealid')
+            ->where('sealbarcodes.barcode',$code)->first();
+        $user = session('user');
+        $this->message = null;
+        if (!$barcodedata) {
+            $this->step = 3;
+            $this->status = 0;
+            $this->message = 'Barcode/QR Code tidak ditemukan !';
+
+        }
+        elseif ($barcodedata->blocked == 1) {
+            $this->step = 3;
+            $this->status = 0;
+            $this->message = 'Barcode/QR Code ini tidak dapat digunakan !';
+        }
+        else  {
+            $sealtypeuser = SealTypeUser::where('sealid',$barcodedata->sealid)
+                ->where('userid',$user->userid)
+                ->first();
+            if (!$sealtypeuser){
+                $this->step = 3;
+                $this->status = 0;
+                $this->message = 'Anda tidak punya Akses ke Segel ini';
+            }
+            else{
+                $this->needcapture = $barcodedata->needcapture;
+                $this->needlocation = $barcodedata->needlocation;
+                
+                if ($barcodedata->status == 0) {
+                    $this->step = 2;
+                }
+                else if ($barcodedata->status == 1) {
+                    $this->step = 2;
+                }
+                else{
+                    $this->step = 3;
+                    $this->message = 'Segel ini sudah pernah dipakai !';
+                }
+                
+                // $this->step = 2;
+                $this->barcodedata = $barcodedata;
+
+
+            }
+        }
     }
 
     #[On('setloc')]
