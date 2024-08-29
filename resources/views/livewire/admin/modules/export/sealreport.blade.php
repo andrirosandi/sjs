@@ -200,9 +200,12 @@
                 <td>{{ $item['sealname'] }}</td>
                 <td><span class="badge {{$item['status'] == 2 ? 'unsealed' : ($item['status'] == 1 ? 'sealed' : 'unused')}}">{{$item['status'] == 2 ? 'unsealed' : ($item['status'] == 1 ? 'sealed' : 'unused')}}</span></td>
                 <td>
+                    @if (!empty($item['sealed_picture']))
                     <a href="{{ env('APP_URL', 'http://localhost').'/storage/pictures/'.$item['sealed_picture'] }}" target="_blank">
                         <img src="{{ env('APP_URL', 'http://localhost').'/storage/pictures/thumbnail/'.$item['sealed_picture'] }}" >
                     </a>
+                    @endif
+                    
                 </td>
                 <td>
                     {{ Str::title($item['sealed_by']) }} <br>
@@ -210,9 +213,11 @@
                     <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($item['sealed_location']) }}" target="_blank">{{ $item['sealed_location'] }}</a>
                 </td>
                 <td>
+                    @if (!empty($item['unsealed_picture']))
                     <a href="{{ env('APP_URL', 'http://localhost').'/storage/pictures/'.$item['unsealed_picture'] }}" target="_blank">
                         <img src="{{ env('APP_URL', 'http://localhost').'/storage/pictures/thumbnail/'.$item['unsealed_picture'] }}" >
-                    </a>
+                    </a> 
+                    @endif
                 </td>
                 <td>
                     {{ Str::title($item['unsealed_by']) }} <br>
