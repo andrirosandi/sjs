@@ -1,5 +1,4 @@
 <div>
-    
     <div class="flex justify-start space-x-2 items-center" wire:replace>
         <!-- Tombol Unduh Seal-History.Rpt -->
         <a href="{{ env('APP_URL') }}/storage/reports/seal-history.rpt" 
@@ -52,24 +51,30 @@
         </div>
       
         <!-- Sealed By -->
-        {{-- <div> --}}
-          {{-- <label for="sealed_by" class="block text-xs font-medium text-gray-700">Sealed By</label> --}}
-          {{-- <input wire:model='sealed_by' type="text" id="sealed_by" name="sealed_by" class="mt-1 block w-full md:w-1/4 rounded-md border-gray-300 shadow-sm text-xs" /> --}}
-          {{-- @include('livewire.includes.error-field', ['field' => 'sealed_by']) --}}
-        {{-- </div> --}}
-
+        <!-- Sealed By -->
         <div>
-            <label for="sealed_by" class="block text-xs font-medium text-gray-700">Seal By</label>
-            <select wire:model='sealed_by' id="sealed_by" name="sealed_by" class="mt-1 block w-full md:w-1/4 rounded-md border-gray-300 shadow-sm text-xs">
-              <option></option>
-              @if(!empty($sealusers))
-              @foreach (@$sealusers as $sealuser )
-                  <option value="{{$sealuser->userid}}">{{ Str::title( $sealuser->userid)}}</option>
-              @endforeach
-              @endif
-            </select>
-            @include('livewire.includes.error-field', ['field' => 'sealed_by'])
-          </div>
+            <label for="sealed_by" class="block text-xs font-medium text-gray-700">Sealed By (From - To)</label>
+            <div class="flex space-x-2">
+                <select wire:model='sealed_by_from' id="sealed_by_from" name="sealed_by_from" class="mt-1 block w-1/2 md:w-1/4 rounded-md border-gray-300 shadow-sm text-xs">
+                    <option></option>
+                    @if(!empty($sealusers))
+                    @foreach (@$sealusers as $sealuser)
+                        <option value="{{$sealuser->userid}}">{{ Str::title($sealuser->userid) }}</option>
+                    @endforeach
+                    @endif
+                </select>
+                <select wire:model='sealed_by_to' id="sealed_by_to" name="sealed_by_to" class="mt-1 block w-1/2 md:w-1/4 rounded-md border-gray-300 shadow-sm text-xs">
+                    <option></option>
+                    @if(!empty($sealusers))
+                    @foreach (@$sealusers as $sealuser)
+                        <option value="{{$sealuser->userid}}">{{ Str::title($sealuser->userid) }}</option>
+                    @endforeach
+                    @endif
+                </select>
+            </div>
+            @include('livewire.includes.error-field', ['field' => 'sealed_by_from'])
+            @include('livewire.includes.error-field', ['field' => 'sealed_by_to'])
+        </div>
       
         <!-- Sealed At -->
         <div>
@@ -83,23 +88,29 @@
         </div>
       
         <!-- Unsealed By -->
-        {{-- <div> --}}
-          {{-- <label for="unsealed_by" class="block text-xs font-medium text-gray-700">Unsealed By</label> --}}
-          {{-- <input wire:model='unsealed_by' type="text" id="unsealed_by" name="unsealed_by" class="mt-1 block w-full md:w-1/4 rounded-md border-gray-300 shadow-sm text-xs" /> --}}
-          {{-- @include('livewire.includes.error-field', ['field' => 'unsealed_by']) --}}
-        {{-- </div> --}}
         <div>
-            <label for="unsealed_by" class="block text-xs font-medium text-gray-700">Unseal By</label>
-            <select wire:model='unsealed_by' id="unsealed_by" name="unsealed_by" class="mt-1 block w-full md:w-1/4 rounded-md border-gray-300 shadow-sm text-xs">
-              <option></option>
-              @if(!empty($sealusers))
-              @foreach (@$sealusers as $sealuser )
-                  <option value="{{$sealuser->userid}}">{{ Str::title( $sealuser->userid)}}</option>
-              @endforeach
-              @endif
-            </select>
-            @include('livewire.includes.error-field', ['field' => 'unsealed_by'])
-          </div>
+            <label for="unsealed_by" class="block text-xs font-medium text-gray-700">Unsealed By (From - To)</label>
+            <div class="flex space-x-2">
+                <select wire:model='unsealed_by_from' id="unsealed_by_from" name="unsealed_by_from" class="mt-1 block w-1/2 md:w-1/4 rounded-md border-gray-300 shadow-sm text-xs">
+                    <option></option>
+                    @if(!empty($sealusers))
+                    @foreach (@$sealusers as $sealuser)
+                        <option value="{{$sealuser->userid}}">{{ Str::title($sealuser->userid) }}</option>
+                    @endforeach
+                    @endif
+                </select>
+                <select wire:model='unsealed_by_to' id="unsealed_by_to" name="unsealed_by_to" class="mt-1 block w-1/2 md:w-1/4 rounded-md border-gray-300 shadow-sm text-xs">
+                    <option></option>
+                    @if(!empty($sealusers))
+                    @foreach (@$sealusers as $sealuser)
+                        <option value="{{$sealuser->userid}}">{{ Str::title($sealuser->userid) }}</option>
+                    @endforeach
+                    @endif
+                </select>
+            </div>
+            @include('livewire.includes.error-field', ['field' => 'unsealed_by_from'])
+            @include('livewire.includes.error-field', ['field' => 'unsealed_by_to'])
+        </div>
       
         <!-- Unsealed At -->
         <div>

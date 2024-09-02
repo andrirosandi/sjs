@@ -29,6 +29,11 @@ class Sealreport extends Component
     $unsealed_at_from,
     $unsealed_at_to,
 
+    $sealed_by_from,
+    $sealed_by_to,
+    $unsealed_by_from,
+    $unsealed_by_to,
+
     $sealed_by,
     $unsealed_by,
 
@@ -73,6 +78,10 @@ class Sealreport extends Component
         $this->sealed_at_to = null;
         $this->unsealed_at_from = null;
         $this->unsealed_at_to = null;
+        $this->sealed_by_from = null;
+        $this->sealed_by_to = null;
+        $this->unsealed_by_from = null;
+        $this->unsealed_by_to = null;
         $this->sealed_by = null;
         $this->unsealed_by = null;
         $this->blocked = null;
@@ -95,6 +104,10 @@ class Sealreport extends Component
             'sealed_at_to' => $this->sealed_at_to,
             'unsealed_at_from' => $this->unsealed_at_from,
             'unsealed_at_to' => $this->unsealed_at_to,
+            'sealed_by_from' => $this->sealed_by_from,
+            'sealed_by_to' => $this->sealed_by_to,
+            'unsealed_by_from' => $this->unsealed_by_from,
+            'unsealed_by_to' => $this->unsealed_by_to,
             'sealed_by' => $this->sealed_by,
             'unsealed_by' => $this->unsealed_by,
             'blocked' => $this->blocked,
@@ -111,6 +124,10 @@ class Sealreport extends Component
             'sealed_at_to' => 'nullable|date|after_or_equal:sealed_at_from',
             'unsealed_at_from' => 'nullable|date',
             'unsealed_at_to' => 'nullable|date|after_or_equal:unsealed_at_from',
+            'sealed_by_from' => 'nullable|string|max:255',
+            'sealed_by_to' => 'nullable|string|max:255',
+            'unsealed_by_from' => 'nullable|string|max:255',
+            'unsealed_by_to' => 'nullable|string|max:255',
             'sealed_by' => 'nullable|string|max:255',
             'unsealed_by' => 'nullable|string|max:255',
             'blocked' => 'nullable|boolean',
@@ -143,12 +160,25 @@ class Sealreport extends Component
     }
     function load($remark = null){
         $this->validateInputs();
-        $this->sealtypes = SealType::get();
-        $this->sealusers = User::leftJoin('sealtypeusers','users.userid','sealtypeusers.userid')->select('users.userid')->distinct()->get();
+        $this->sealtypes = SealType::orderBy('sealid','asc')->get();
+        $this->sealusers = User::leftJoin('sealtypeusers','users.userid','sealtypeusers.userid')->select('users.userid')->orderBy('users.userid','asc')->distinct()->get();
 
         // dump($this->sealusers);s
         $object = SealBarcode::join('SealTypes','sealbarcodes.sealid','sealtypes.sealid');
         if (!empty(trim($this->code))) $object = $object->where('sealbarcodes.barcode','like','%'.$this->code.'%');
+        // Filter untuk sealed_by
+        if (!empty(trim($this->sealed_by_from)) || !empty(trim($this->sealed_by_to))) {
+            $sealed_by_from = $this->sealed_by_from ?: 'aaa';
+            $sealed_by_to = $this->sealed_by_to ?: 'zzz';
+            $object = $object->whereBetween('sealbarcodes.sealed_by', [$sealed_by_from, $sealed_by_to]);
+        }
+
+        // Filter untuk unsealed_by
+        if (!empty(trim($this->unsealed_by_from)) || !empty(trim($this->unsealed_by_to))) {
+            $unsealed_by_from = $this->unsealed_by_from ?: 'aaa';
+            $unsealed_by_to = $this->unsealed_by_to ?: 'zzz';
+            $object = $object->whereBetween('sealbarcodes.unsealed_by', [$unsealed_by_from, $unsealed_by_to]);
+        }
         if (!empty(trim($this->sealed_by))) $object = $object->where('sealbarcodes.sealed_by','like','%'.$this->sealed_by.'%');
         if (!empty(trim($this->unsealed_by))) $object = $object->where('sealbarcodes.unsealed_by','like','%'.$this->unsealed_by.'%');
         if (!empty(trim($this->sealid))) $object = $object->where('sealtypes.sealid','like','%'.$this->sealid.'%');
